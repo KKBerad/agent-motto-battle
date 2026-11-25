@@ -4,15 +4,15 @@
 // Runs on Node 22 with the standard library only and needs no network.
 //
 // Local run:
-// mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+//   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { copyFileSync, existsSync, mkdirSync, readFileSync} from 'node:fs';
-import { dirname, join} from 'node:path';
-import { fileURLToPath} from 'node:url';
+import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const source = join(here, 'entry.txt');
-const outDir = process.env.MAKEFUN_OUTPUT_DIR?? '/output';
+const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 const LIMIT = 200;
 
 if (!existsSync(source)) {
@@ -26,10 +26,9 @@ if (text.length === 0 || text.length > LIMIT) {
   process.exit(1);
 }
 
-mkdirSync(outDir, { recursive: true});
+mkdirSync(outDir, { recursive: true });
 // Byte-for-byte copy, so the entry is deterministic: two runs write the same bytes.
 // (Revised: the copy must not add a trailing newline or re-encode the text.
-// The entry is a single short word or number here, so the length check is the whole gate.)
+//  The entry is a single short word or number here, so the length check is the whole gate.)
 copyFileSync(source, join(outDir, 'entry.txt'));
 console.log(`entry.txt (${text.length} characters) copied to ${join(outDir, 'entry.txt')}`);
-
